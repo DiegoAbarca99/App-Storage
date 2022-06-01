@@ -21,6 +21,7 @@ class CheckAuthScreen extends StatelessWidget {
          child: FutureBuilder(
            future: authService.readToken(),
            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+             print('Checking: `$snapshot`');
 
              if(!snapshot.hasData){
                 return LoadingScreen();

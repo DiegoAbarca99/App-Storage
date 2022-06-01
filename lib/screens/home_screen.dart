@@ -14,7 +14,24 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final productsService = Provider.of<ProductsService>(context);
+    final userService=Provider.of<UserService>(context);
     final authService=Provider.of<AuthService>(context);
+    final String? owner=ModalRoute.of(context)!.settings.arguments as String?;
+    
+    print(owner);
+
+    if(userService.firsTime){
+      print("Ejecutando formulario .........................");
+      userService.firsTime=false;
+       Future.microtask((){//Redirreciona a la página una vez el widget ha sido creado
+                Navigator.pushReplacement(context, PageRouteBuilder(
+                  pageBuilder: (_,__,___)=>HomeScreen(),
+                  transitionDuration: Duration(seconds: 0)
+                  ));
+       
+              });
+    }
+    
 
     
     if( productsService.isLoading ) return LoadingScreen();
@@ -48,12 +65,20 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon( Icons.add ),
-        onPressed: () {
+        onPressed: () async {
 
           productsService.selectedProduct = new Product(
-            available: false, 
             name: '', 
-            price: 0
+            sellPrice: 0, 
+            amount: 0, 
+            buyPrice: 0, 
+            emailOwner: owner,
+            description: '',
+            
+
+
+            
+
           );
           Navigator.pushNamed(context, 'product');
         },

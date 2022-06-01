@@ -1,50 +1,88 @@
 // To parse this JSON data, do
 //
-//     final welcome = welcomeFromMap(jsonString);
+//     final product = productFromMap(jsonString);
 
 import 'dart:convert';
 
 class Product {
     Product({
-       required this.available,
-       required  this.name,
+       required this.amount,
+       required this.buyPrice,
+       required this.name,
        this.picture,
-       this.price,
-       this.id
-    });
+       required this.sellPrice,
+       this.qrCode,
+       this.id,
+       this.emailOwner,
+       this.description,
+       this.category
+    }); 
 
-    bool available;
+    int amount;
+    double? buyPrice;
     String name;
     String? picture;
-    double? price;
+    double? sellPrice;
+    String? qrCode;
     String? id;
+    String? emailOwner;
+    String? description;
+    String? category;
 
     factory Product.fromJson(String str) => Product.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
     factory Product.fromMap(Map<String, dynamic> json) => Product(
-        available: json["Available"],
+        amount: json["Amount"],
+        buyPrice: json["BuyPrice"]== null ? null : json["Price"].toDouble(),
         name: json["Name"],
         picture: json["Picture"],
-        price: json["Price"] == null ? null : json["Price"].toDouble(),
+        sellPrice: json["SellPrice"]== null ? null : json["Price"].toDouble(),
+        qrCode: json["QRCode"],
+        emailOwner: json["EmailOwner"],
+        description: json["Description"],
+        category: json["Category"]
+    
     );
 
     Map<String, dynamic> toMap() => {
-        "Available": available,
+        "Amount": amount,
+        "BuyPrice": buyPrice,
         "Name": name,
         "Picture": picture,
-        "Price": price == null ? null : price,
+        "SellPrice": sellPrice,
+        "QRCode": qrCode,
+        "EmailOwner":emailOwner,
+        "Description": description,
+        "Category" : category,
+
     };
 
-    Product copy()=>Product(
-      available: this.available,
+
+ Product copy()=>Product(
       name: this.name,
       picture:this.picture, 
-      price:this.price,
-      id: this.id    
+      sellPrice:this.sellPrice,
+      id: this.id, 
+      amount: this.amount,
+      buyPrice: this.buyPrice, 
+      qrCode: this.qrCode, 
+      description: this.description,
+      emailOwner: this.emailOwner,
+      category: this.category
+       
+       
       );
 
-    
+
+
+
+
+
 
 }
+
+
+
+   

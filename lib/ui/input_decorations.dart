@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class InputDecorations {
 
   static InputDecoration authInputDecoration({
-    required String hintText,
-    required String labelText,
+    String? hintText,
+    String? labelText,
     IconData? prefixIcon
   }) {
     return InputDecoration(
@@ -20,8 +20,12 @@ class InputDecorations {
             width: 2
           )
         ),
-        hintText: hintText,
-        labelText: labelText,
+        hintText:hintText==null?null: hintText,
+        hintStyle: TextStyle(
+          color: Colors.black,
+
+        ),
+        labelText:labelText==null?null:labelText,
         labelStyle: TextStyle(
           color: Colors.grey
         ),

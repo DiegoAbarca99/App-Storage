@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 
 
 class ProductsService extends ChangeNotifier{
-  final String _baseUrl='flutter-varios-96c93-default-rtdb.firebaseio.com';
+  final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
+
   final List<Product> products=[];
   bool isLoading=true;
   bool isSaving=false;
@@ -36,8 +37,10 @@ class ProductsService extends ChangeNotifier{
    });
    final resp= await http.get(url);
 
-   final Map<String,dynamic> productsMap=json.decode(resp.body);
+   final Map <String,dynamic>? productsMap=json.decode(resp.body);
 
+   print('Respuesta: `${resp.body}`');
+    productsMap==null?null:
    productsMap.forEach((key,value){//Parsea el mapa que posee un key exterior y a cada uno se le asigna un objeto del tipo producto
      final tempProduct=Product.fromMap(value);
      tempProduct.id=key;
@@ -79,10 +82,15 @@ class ProductsService extends ChangeNotifier{
 
     products.forEach((element) {
       if(element.id==product.id){
-        element.available=product.available;
         element.name=product.name;
-        element.price=product.price;
+        element.category=product.category;
+        element.description=product.description;
+        element.sellPrice=product.sellPrice;
+        element.buyPrice=product.buyPrice;
         element.picture=product.picture;
+        element.qrCode=product.qrCode;
+        element.amount=product.amount;
+
       }else{
         return;
       }
@@ -117,18 +125,17 @@ class ProductsService extends ChangeNotifier{
 
 
   Future deleteProduct(Product product) async{
-    final url= Uri.https(_baseUrl,'Products.json',{
+    final url= Uri.https(_baseUrl,'Products/${product.id}.json',{
      'auth':await storage.read(key: 'token')??''
    });
 
 
-   final resp= await http.delete(url,body: product.toJson());
-    print(resp.body);
-   loadProducts();
+     final resp=  await http.delete(url);
+      print('Resp delete:`${resp.body}`');
 
-
-
-  
+    //  products.remove(product);
+      loadProducts();
+    
 
 
   }
