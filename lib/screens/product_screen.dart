@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:productos_app/models/models.dart';
 import 'package:productos_app/providers/selected_product.dart';
 import 'package:productos_app/screens/login_screen.dart';
 
@@ -433,8 +434,10 @@ class _ProductForm extends StatelessWidget {
                      productService.isDeleting==true
                     ?null
                     :() {
+
+                      displayDialogAndroid(context,productService,productForm.product);
+
                       
-                      Navigator.pushReplacementNamed(context, 'warning',arguments: productForm.product);
                     },
                    child:Container(
                      padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
@@ -485,6 +488,59 @@ class _ProductForm extends StatelessWidget {
         ),
       ),
     );
+  }
+
+     void displayDialogAndroid(BuildContext context,ProductsService productService,Product? selectedProduct){
+     
+       
+
+           showDialog(
+
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+           
+          return AlertDialog(
+            
+     
+            elevation: 5,
+            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            title: const Text('Advertencia',style: TextStyle(color: Colors.red)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text('¿Esta seguro que desea eliminar el producto?',style: TextStyle(color: Colors.red),),
+                SizedBox(height: 10,),
+              ],
+            ),
+
+            actions: [TextButton(
+              onPressed: (){
+                  Navigator.pushReplacementNamed(context,'product');//Cierra la imagen al presionar el texbutton de cancelar
+              },
+             child: const Text('Cancelar',style: TextStyle(color:Colors.red),)
+             ),
+             TextButton(
+              onPressed: ()async{
+                  Navigator.pushReplacementNamed(context,'home');
+                  await  productService.deleteProduct(selectedProduct!);
+                  
+              },
+             child: const Text('Aceptar')
+             )
+             
+             
+             
+             
+             ],
+
+          );
+        },
+        
+      
+       );
+
+     
   }
 
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
