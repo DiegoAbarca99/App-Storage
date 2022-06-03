@@ -426,16 +426,24 @@ class _ProductForm extends StatelessWidget {
               children: [
                 TextButton(
                    onPressed:
+                    Provider.of<SelectedProduct>(context,listen: false).isSelected==false
+                    ?
+                    null
+                    :
                      productService.isDeleting==true
                     ?null
-                    :()async {
-                      await productService.deleteProduct(productForm.product);
-                      Navigator.pushReplacementNamed(context, 'home');
+                    :() {
+                      
+                      Navigator.pushReplacementNamed(context, 'warning',arguments: productForm.product);
                     },
                    child:Container(
                      padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
                      decoration: _boxDecorationDelete(color:Colors.red),
                      child: Text(
+                       Provider.of<SelectedProduct>(context).isSelected==false
+                       ?
+                       'Deshabilitado'
+                       :
                        productService.isDeleting==true
                        ?'Espere'
                        :'Eliminar',style: TextStyle(color: Colors.white),),

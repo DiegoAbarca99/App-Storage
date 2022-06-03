@@ -40,6 +40,8 @@ class MyApp extends StatelessWidget {
 
         'login'   : ( _ ) => LoginScreen(),
         'register'   : ( _ ) => RegisterScreen(),
+
+        'warning'   :( _ )  => WarningDeleteProductScreen()
       },
       scaffoldMessengerKey:NotificationService.messengerKey,
       theme: ThemeData.light().copyWith(

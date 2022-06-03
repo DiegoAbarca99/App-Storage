@@ -81,6 +81,7 @@ class HomeScreenBody extends StatelessWidget   {
           onTap: () {
 
             Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
+            Provider.of<SelectedProduct>(context,listen: false).isSelected=true;
             Navigator.pushNamed(context, 'product');
           },
           child: ProductCard(
@@ -98,12 +99,10 @@ class HomeScreenBody extends StatelessWidget   {
             amount: 0, 
             buyPrice: 0, 
             description: '',
-            
-
-
-            
-
+          
           );
+
+          Provider.of<SelectedProduct>(context,listen: false).isSelected=false;
           
           Navigator.pushNamed(context, 'product');
         },
