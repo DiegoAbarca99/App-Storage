@@ -13,7 +13,7 @@ class ProductFormProvider extends ChangeNotifier {
  
  
     increaseAmount(){
-     
+      
       this.product.amount+=1;
         notifyListeners();
     }

@@ -147,8 +147,10 @@ class _LoginForm extends StatelessWidget {
                 final String? errorMessage=await authService.login(loginForm.email, loginForm.password);
 
                 if(errorMessage!.contains('@')){
-                    Provider.of<UserService>(context,listen:false).firsTime=false;
-                    Navigator.pushReplacementNamed(context, 'home',arguments: errorMessage);
+                    Provider.of<AuthService>(context,listen:false).firsTime=false;
+                    final token=errorMessage.split('@');
+                    Provider.of<AuthService>(context,listen:false).userToken=token[0];
+                    Navigator.pushReplacementNamed(context, 'home');
                 }else{
                   print(errorMessage);
                   NotificationService.ShowSnackBar(errorMessage);

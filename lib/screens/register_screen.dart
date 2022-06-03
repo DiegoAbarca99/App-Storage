@@ -147,8 +147,11 @@ class _LoginForm extends StatelessWidget {
                 final String errorMessage=await authService.createUser(loginForm.email, loginForm.password);
 
                 if(errorMessage.contains('@')){
-                    Provider.of<UserService>(context,listen:false).firsTime=true;
-                    Navigator.pushReplacementNamed(context, 'home',arguments: errorMessage);
+                    Provider.of<AuthService>(context,listen:false).firsTime=true;
+                    final token=errorMessage.split('@');
+                    Provider.of<AuthService>(context,listen:false).userToken=token[0];
+                  
+                    Navigator.pushReplacementNamed(context, 'home');
                 }else{
                   print(errorMessage);
                   loginForm.isLoading = false;

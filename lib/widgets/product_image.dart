@@ -23,7 +23,7 @@ class ProductImage extends StatelessWidget {
       child: Container(
         decoration: _buildBoxDecoration(),
         width: 180,
-        height: 250,
+        height: 190,
         child: Opacity(
           opacity: 0.9,
           child: ClipRRect(

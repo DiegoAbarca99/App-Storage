@@ -3,9 +3,11 @@ import 'package:productos_app/screens/home_screen.dart';
 import 'package:productos_app/screens/loading_screen.dart';
 import 'package:productos_app/screens/login_screen.dart';
 import 'package:productos_app/services/auth_service.dart';
+import 'package:productos_app/screens/alert_screen.dart';
 import 'package:provider/provider.dart';
 
 class CheckAuthScreen extends StatelessWidget {
+
    
   const CheckAuthScreen({Key? key}) : super(key: key);
 
@@ -36,13 +38,8 @@ class CheckAuthScreen extends StatelessWidget {
 
              });
              }else{
-                Future.microtask((){//Redirreciona a la página una vez el widget ha sido creado
-                Navigator.pushReplacement(context, PageRouteBuilder(
-                  pageBuilder: (_,__,___)=>HomeScreen(),
-                  transitionDuration: Duration(seconds: 0)
-                  ));
-
-             });
+                
+                
              }
 
            

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:productos_app/providers/providers.dart';
+import 'package:productos_app/screens/alert_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:productos_app/models/models.dart';
@@ -8,31 +10,54 @@ import 'package:productos_app/services/services.dart';
 import 'package:productos_app/widgets/widgets.dart';
 
 
+
+
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    final productsService = Provider.of<ProductsService>(context);
-    final userService=Provider.of<UserService>(context);
     final authService=Provider.of<AuthService>(context);
-    final String? owner=ModalRoute.of(context)!.settings.arguments as String?;
-    
-    print(owner);
+    print('User token desde el homescreen: `${authService.userToken}`');
 
-    if(userService.firsTime){
-      print("Ejecutando formulario .........................");
-      userService.firsTime=false;
-       Future.microtask((){//Redirreciona a la página una vez el widget ha sido creado
-                Navigator.pushReplacement(context, PageRouteBuilder(
-                  pageBuilder: (_,__,___)=>HomeScreen(),
-                  transitionDuration: Duration(seconds: 0)
-                  ));
-       
-              });
+    if(authService.firsTime){
+         
+        print("Ejecutando formulario .........................");
+        return AlertScreen();
+     
+    }else{
+      return ChangeNotifierProvider(
+        create: (context)=>ProductsService(userToken:authService.userToken ),
+        child: HomeScreenBody(authService: authService,),
+      );
+
     }
     
 
+
+  
+  }
+}
+
+
+class HomeScreenBody extends StatelessWidget   {
+   
+  final AuthService authService;
+
+  const HomeScreenBody({Key? key,required this.authService}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    
+   
+
+    final productsService = Provider.of<ProductsService>(context);
+
+   
+
+    
+
+    
     
     if( productsService.isLoading ) return LoadingScreen();
 
@@ -55,7 +80,7 @@ class HomeScreen extends StatelessWidget {
         itemBuilder: ( BuildContext context, int index ) => GestureDetector(
           onTap: () {
 
-            productsService.selectedProduct = productsService.products[index].copy();
+            Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
             Navigator.pushNamed(context, 'product');
           },
           child: ProductCard(
@@ -67,12 +92,11 @@ class HomeScreen extends StatelessWidget {
         child: Icon( Icons.add ),
         onPressed: () async {
 
-          productsService.selectedProduct = new Product(
+          Provider.of<SelectedProduct>(context,listen: false).selectedProduct= new Product(
             name: '', 
             sellPrice: 0, 
             amount: 0, 
             buyPrice: 0, 
-            emailOwner: owner,
             description: '',
             
 
@@ -80,6 +104,7 @@ class HomeScreen extends StatelessWidget {
             
 
           );
+          
           Navigator.pushNamed(context, 'product');
         },
       ),

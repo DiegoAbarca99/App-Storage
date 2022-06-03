@@ -8,7 +8,28 @@ class AuthService extends ChangeNotifier{
 
   final String _baseUrl='identitytoolkit.googleapis.com';
   final String _firebaseToken='AIzaSyAvvGXo9mnsKvHc83N-CVfFvazra0B7C2g';
+  String? _userToken;
   final storage=FlutterSecureStorage();
+
+
+  bool _firsTime=false;
+
+
+  bool get firsTime=>_firsTime;
+
+  set firsTime(bool value){
+    _firsTime=value;
+    // notifyListeners();
+    }
+
+
+
+   String? get userToken=>_userToken;
+
+  set userToken(String? value){
+      _userToken=value;
+      notifyListeners();
+  }
 
   Future<String> createUser(String email,String password) async{
     final Map<String,dynamic> authData={
@@ -25,8 +46,7 @@ class AuthService extends ChangeNotifier{
     final resp=await http.post(url,body: json.encode(authData));
     final Map<String,dynamic> decodeResp=json.decode(resp.body);
 
-  //TODO: Crear provider para el parametro email y asignarlo como un campo de la tabla producto
-    print('Respuests al crear un usuario: `${decodeResp['email']}` ');
+ 
 
     if(decodeResp.containsKey('idToken')){
       await storage.write(key: 'token', value: decodeResp['idToken']);
@@ -54,7 +74,7 @@ class AuthService extends ChangeNotifier{
     final Map<String,dynamic> decodeResp=json.decode(resp.body);
 
     if(decodeResp.containsKey('idToken')){
-      print('Token:    `${decodeResp}`');
+      
       await storage.write(key: 'token', value: decodeResp['idToken']);
       return decodeResp['email'];
     }else{

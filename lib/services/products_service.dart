@@ -10,17 +10,23 @@ import 'package:http/http.dart' as http;
 
 
 class ProductsService extends ChangeNotifier{
+  late String? userToken;
+
   final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
 
   final List<Product> products=[];
   bool isLoading=true;
   bool isSaving=false;
-  Product? selectedProduct;
+  bool isDeleting=false;
+  late Product selectedProduct;
   File? newPictureFile;
   final storage=FlutterSecureStorage();
 
+
+
   
-  ProductsService(){
+  
+  ProductsService({this.userToken}){
     this.loadProducts();
   }
 
@@ -32,7 +38,7 @@ class ProductsService extends ChangeNotifier{
     notifyListeners();
 
 
-   final url= Uri.https(_baseUrl,'Products.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.get(url);
@@ -73,7 +79,7 @@ class ProductsService extends ChangeNotifier{
 
   Future<String> updateProduct(Product product) async{
     
-   final url= Uri.https(_baseUrl,'Products/${product.id}.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Products/${product.id}.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.put(url,body: product.toJson());
@@ -106,7 +112,7 @@ class ProductsService extends ChangeNotifier{
   
   Future<String> createProduct(Product product) async{
     
-   final url= Uri.https(_baseUrl,'Products.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.post(url,body: product.toJson());
@@ -125,13 +131,19 @@ class ProductsService extends ChangeNotifier{
 
 
   Future deleteProduct(Product product) async{
-    final url= Uri.https(_baseUrl,'Products/${product.id}.json',{
+    isDeleting=true;
+    notifyListeners();
+
+
+    final url= Uri.https(_baseUrl,'$userToken/Products/${product.id}.json',{
      'auth':await storage.read(key: 'token')??''
    });
 
 
      final resp=  await http.delete(url);
       print('Resp delete:`${resp.body}`');
+
+    isDeleting=false;
 
     //  products.remove(product);
       loadProducts();
@@ -142,7 +154,7 @@ class ProductsService extends ChangeNotifier{
 
 
   void upDateSelectedProductImage(String path){
-      selectedProduct!.picture=path;
+      selectedProduct.picture=path;
       newPictureFile=File.fromUri(Uri(path: path));
       notifyListeners();
   }

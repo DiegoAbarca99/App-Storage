@@ -13,7 +13,6 @@ class Product {
        required this.sellPrice,
        this.qrCode,
        this.id,
-       this.emailOwner,
        this.description,
        this.category
     }); 
@@ -25,7 +24,6 @@ class Product {
     double? sellPrice;
     String? qrCode;
     String? id;
-    String? emailOwner;
     String? description;
     String? category;
 
@@ -35,12 +33,11 @@ class Product {
 
     factory Product.fromMap(Map<String, dynamic> json) => Product(
         amount: json["Amount"],
-        buyPrice: json["BuyPrice"]== null ? null : json["Price"].toDouble(),
+        buyPrice: json["BuyPrice"]== null ? null : json["BuyPrice"].toDouble(),
         name: json["Name"],
         picture: json["Picture"],
-        sellPrice: json["SellPrice"]== null ? null : json["Price"].toDouble(),
+        sellPrice: json["SellPrice"]== null ? null : json["SellPrice"].toDouble(),
         qrCode: json["QRCode"],
-        emailOwner: json["EmailOwner"],
         description: json["Description"],
         category: json["Category"]
     
@@ -53,7 +50,6 @@ class Product {
         "Picture": picture,
         "SellPrice": sellPrice,
         "QRCode": qrCode,
-        "EmailOwner":emailOwner,
         "Description": description,
         "Category" : category,
 
@@ -69,7 +65,6 @@ class Product {
       buyPrice: this.buyPrice, 
       qrCode: this.qrCode, 
       description: this.description,
-      emailOwner: this.emailOwner,
       category: this.category
        
        

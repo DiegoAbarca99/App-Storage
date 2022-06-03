@@ -6,15 +6,15 @@ import 'dart:convert';
 
 class Customer {
     Customer({
-        this.cellPhone,
-        this.comments,
-        this.document,
-        this.kindDocument,
-        this.name,
+      required  this.cellPhone,
+      this.comments,
+      required  this.document,
+      required  this.kindDocument,
+      required  this.name,
     });
 
     int cellPhone;
-    String comments;
+    String? comments;
     String document;
     String kindDocument;
     String name;

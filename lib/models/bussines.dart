@@ -4,40 +4,44 @@
 
 import 'dart:convert';
 
-class User {
-    User({
+import 'dart:ffi';
+
+class Bussines {
+    Bussines({
       this.ownerName,
       this.kindBussines,
       this.bussinesName,
       this.direction,
-      this.picture,
+      this.description,
       this.totalSales,
       this.totalExpenses,
-      this.utility
+      this.utility,
+      this.id
       
     });
-    String? utility;
-    String? totalSales;
-    String? totalExpenses;
+    String? id;
+    Double? utility;
+    Double? totalSales;
+    Double? totalExpenses;
     String? ownerName;
     String? kindBussines;
     String? bussinesName;
     String? direction;
-    String? picture;
+    String? description;
 
-    factory User.fromJson(String str) => User.fromMap(json.decode(str));
+    factory Bussines.fromJson(String str) => Bussines.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory User.fromMap(Map<String, dynamic> json) => User(
+    factory Bussines.fromMap(Map<String, dynamic> json) => Bussines(
         kindBussines: json["KindBussines"],
         bussinesName: json["BussinesName"],
         ownerName: json["OwnerName"],
         direction:json["Direction"],
-        picture: json["Picture"],
         utility: json["Utility"],
         totalSales:json["TotalSales"],
-        totalExpenses: json["TotalExpenses"]
+        totalExpenses: json["TotalExpenses"],
+        description: json["Description"]
 
         
     );
@@ -46,11 +50,11 @@ class User {
         "KindBussines": kindBussines,
         "BussinesName": bussinesName,
         "OwnerName": ownerName,
-        "Picture":picture,
         "Direction":direction,
         "Utility":utility,
         "TotalSales":totalSales,
         "TotalExpenses":totalExpenses,
+        "Description":  description,
         
     };
 }
