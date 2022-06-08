@@ -4,15 +4,11 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Products'),
-      ),
-      body: Center(
+    return Center(
         child: CircularProgressIndicator(
           color: Colors.indigo,
         ),
-     ),
-   );
+     );
+   
   }
 }

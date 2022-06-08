@@ -17,19 +17,36 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     final authService=Provider.of<AuthService>(context);
     print('User token desde el homescreen: `${authService.userToken}`');
 
     if(authService.firsTime){
          
         print("Ejecutando formulario .........................");
-        return AlertScreen();
+        return AlertScreen(); 
      
     }else{
-      return ChangeNotifierProvider(
-        create: (context)=>ProductsService(userToken:authService.userToken ),
-        child: HomeScreenBody(authService: authService,),
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Bienvenido'),
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(Icons.login_outlined),
+              onPressed: () { 
+                 authService.logout();
+                 Navigator.pushReplacementNamed(context, 'login');
+
+              },
+           ),
+        ),
+        body: _HomeScreenBody(authService: authService),
+        bottomNavigationBar:CustomBottomNavigatorBar()
       );
+      
+
+    
 
     }
     
@@ -40,75 +57,36 @@ class HomeScreen extends StatelessWidget {
 }
 
 
-class HomeScreenBody extends StatelessWidget   {
+class _HomeScreenBody extends StatelessWidget   {
    
   final AuthService authService;
 
-  const HomeScreenBody({Key? key,required this.authService}) : super(key: key);
+  const _HomeScreenBody({Key? key,required this.authService}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+     final currentIndex=Provider.of<UiProvider>(context).selectMenuOpt;
     
-   
-
-    final productsService = Provider.of<ProductsService>(context);
-
-   
-
-    
-
-    
-    
-    if( productsService.isLoading ) return LoadingScreen();
-
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Productos'),
-        leading: IconButton(
-          icon: Icon(Icons.login_outlined),
-           onPressed: () { 
-             
-             authService.logout();
-             Navigator.pushReplacementNamed(context, 'login');
-
-            },
-        ),
-      ),
-      body: ListView.builder(
-        itemCount: productsService.products.length,
-        itemBuilder: ( BuildContext context, int index ) => GestureDetector(
-          onTap: () {
-
-            Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
-            Provider.of<SelectedProduct>(context,listen: false).isSelected=true;
-            Navigator.pushNamed(context, 'product');
-          },
-          child: ProductCard(
-            product: productsService.products[index],
-          ),
-        )
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon( Icons.add ),
-        onPressed: () async {
-
-          Provider.of<SelectedProduct>(context,listen: false).selectedProduct= new Product(
-            name: '', 
-            sellPrice: 0, 
-            amount: 0, 
-            buyPrice: 0, 
-            description: '',
-          
+    switch (currentIndex) {
+      case 0 :
+        return ChangeNotifierProvider(
+          create: (_)=>BussinesService(userToken: authService.userToken),
+          child: BussinesScreen(),
           );
 
-          Provider.of<SelectedProduct>(context,listen: false).isSelected=false;
-          
-          Navigator.pushNamed(context, 'product');
-        },
-      ),
+      case 1:
+        return ChangeNotifierProvider(
+          create: (context)=>ProductsService(userToken:authService.userToken ),
+          child: IventoryScreen(authService: authService,));
+      
+      default:
+        return const BussinesScreen();
+    }
 
-      bottomNavigationBar:CustomBottomNavigatorBar()
-   );
+ 
+
+     
+   
   }
 }
