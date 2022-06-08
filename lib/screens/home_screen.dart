@@ -107,6 +107,8 @@ class HomeScreenBody extends StatelessWidget   {
           Navigator.pushNamed(context, 'product');
         },
       ),
+
+      bottomNavigationBar:CustomBottomNavigatorBar()
    );
   }
 }

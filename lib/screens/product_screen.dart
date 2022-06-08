@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 import 'package:productos_app/models/models.dart';
-import 'package:productos_app/providers/selected_product.dart';
-import 'package:productos_app/screens/login_screen.dart';
-
-import 'package:provider/provider.dart';
-import 'package:productos_app/providers/product_form_provider.dart';
-
+import 'package:productos_app/providers/providers.dart';
 import 'package:productos_app/services/services.dart';
-
 import 'package:productos_app/ui/input_decorations.dart';
 import 'package:productos_app/widgets/widgets.dart';
+
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
+
 
 
 class ProductScreen extends StatelessWidget {
@@ -509,7 +508,7 @@ class _ProductForm extends StatelessWidget {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: const [
-                Text('¿Esta seguro que desea eliminar el producto?',style: TextStyle(color: Colors.red),),
+                Text('¿Esta seguro que desea eliminar el producto?',),
                 SizedBox(height: 10,),
               ],
             ),
@@ -518,7 +517,7 @@ class _ProductForm extends StatelessWidget {
               onPressed: (){
                   Navigator.pushReplacementNamed(context,'product');//Cierra la imagen al presionar el texbutton de cancelar
               },
-             child: const Text('Cancelar',style: TextStyle(color:Colors.red),)
+             child: const Text('Cancelar',style: TextStyle(color:Colors.blue),)
              ),
              TextButton(
               onPressed: ()async{
@@ -526,7 +525,7 @@ class _ProductForm extends StatelessWidget {
                   await  productService.deleteProduct(selectedProduct!);
                   
               },
-             child: const Text('Aceptar')
+             child: const Text('Aceptar',style: TextStyle(color:Colors.red))
              )
              
              
