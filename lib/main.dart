@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/providers/providers.dart';
+import 'package:productos_app/providers/selected_bussines_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:productos_app/screens/screens.dart';
@@ -16,6 +17,7 @@ class AppState extends StatelessWidget {
       providers: [
          ChangeNotifierProvider(create: ( _ ) => UiProvider() ),
         ChangeNotifierProvider(create: ( _ ) => SelectedProduct() ),
+        ChangeNotifierProvider(create: ( _ ) => SelectedBussinesProvider() ),
         ChangeNotifierProvider(create: ( _ ) => AuthService() ), 
       ],
       child: MyApp(),
@@ -34,10 +36,13 @@ class MyApp extends StatelessWidget {
       title: 'App-Storage',
       initialRoute: 'register',
       routes: {
-        'checking': ( _ ) => CheckAuthScreen(),
 
         'home'    : ( _ ) => HomeScreen(),
+
+
         'product' : ( _ ) => ProductScreen(),
+        'viewproduct':( _ ) => ViewProductScreen(),
+         
 
         'login'   : ( _ ) => LoginScreen(),
         'register'   : ( _ ) => RegisterScreen(),

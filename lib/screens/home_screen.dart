@@ -76,10 +76,17 @@ class _HomeScreenBody extends StatelessWidget   {
           );
 
       case 1:
-        return ChangeNotifierProvider(
-          create: (context)=>ProductsService(userToken:authService.userToken ),
-          child: IventoryScreen(authService: authService,));
-      
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_)=>BussinesService(userToken:authService.userToken),
+            ),
+            ChangeNotifierProvider(
+              create: (_)=>ProductsService(userToken:authService.userToken ),
+            ),   
+          ],
+          child:IventoryScreen(authService: authService) ,
+        );   
       default:
         return const BussinesScreen();
     }

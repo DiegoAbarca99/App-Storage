@@ -16,9 +16,13 @@ class Bussines {
       this.totalSales,
       this.totalExpenses,
       this.utility,
-      this.id
+      this.id,
+      this.referenceNumber,
+      this.totalCost
       
     });
+    int? referenceNumber;
+    double?totalCost;
     String? id;
     Double? utility;
     Double? totalSales;
@@ -41,7 +45,9 @@ class Bussines {
         utility: json["Utility"],
         totalSales:json["TotalSales"],
         totalExpenses: json["TotalExpenses"],
-        description: json["Description"]
+        description: json["Description"],
+        referenceNumber: json["ReferenceNumber"]==null?0:int.parse(json["ReferenceNumber"],),
+        totalCost: json["TotalCost"]==null?0:json["TotalCost"].toDouble()
 
         
     );
@@ -55,6 +61,8 @@ class Bussines {
         "TotalSales":totalSales,
         "TotalExpenses":totalExpenses,
         "Description":  description,
+        "ReferenceNumber":referenceNumber,
+        "TotalCost":totalCost
         
     };
 }

@@ -22,7 +22,29 @@ class IventoryScreen extends StatelessWidget   {
    
 
     final productsService = Provider.of<ProductsService>(context);
+    final selectedBussines=Provider.of<SelectedBussinesProvider>(context).selectedBussines;
+
     final size=MediaQuery.of(context).size;
+
+
+     List<double> multiplication=[];
+
+                    double accumulator=0;
+
+                    for (var i = 0; i < productsService.products.length; i++) {
+                        multiplication.add(productsService.products[i].amount.toDouble()*productsService.products[i].buyPrice!);
+                    }
+
+                    
+                    for (int i = 0; i < multiplication.length; i++) {
+                        
+                        accumulator=accumulator+multiplication[i];
+                    }
+
+                    selectedBussines!.totalCost=accumulator;
+
+                    print('costo total: ${selectedBussines.totalCost}, acumulador: $accumulator, producto: $multiplication'  , );
+
   
     
     if( productsService.isLoading ) return LoadingScreen();
@@ -33,25 +55,64 @@ class IventoryScreen extends StatelessWidget   {
           Container(
             height:size.height*0.23,
             width:double.infinity,
-            color:Colors.red
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FittedBox(
+                  fit:BoxFit.contain,
+                  child: Container(
+                    width: 150,
+                    decoration:_buildBoxDecoration(),
+                    child: Column(
+                      children: [
+                        
+                        Text('Total de referencias'),
+                        
+                        Text('${selectedBussines!.referenceNumber.toString()}')
+                        
+                          
+                        ],
+                    ),
+                  ),
+                ),
+          
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Container(
+                    width: 120,
+                    decoration: _buildBoxDecoration(),
+                    child: Column(
+                      children: [
+                          
+                        Text('Costo total'),
+                          
+                        Text('${selectedBussines.totalCost.toString()}')
+                        
+                          
+                        ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
          
              AppBackground(
                widget: ListView.builder(
                 itemCount: productsService.products.length,
-                itemBuilder: ( BuildContext context, int index ) => GestureDetector(
-                  onTap: () {
-                       
-                    Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
-                    Provider.of<SelectedProduct>(context,listen: false).isSelected=true;
-                    Navigator.pushNamed(context, 'product');
-                  },
-                  child: ProductCard(
-                    product: productsService.products[index],
-                  ),
-                )
-                         ),
-             ),
+                itemBuilder: ( BuildContext context, int index ) {
+
+                    return GestureDetector(
+                      onTap: () {
+                        Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
+                        Navigator.pushNamed(context, 'viewproduct');
+                    },
+                      child: ProductCard(product: productsService.products[index]),
+                 );
+                  
+                } 
+              ),
+            ),
           
 
          SizedBox(height:15),
@@ -77,7 +138,6 @@ class IventoryScreen extends StatelessWidget   {
           
                 );
 
-              Provider.of<SelectedProduct>(context,listen: false).isSelected=false;
           
              Navigator.pushNamed(context, 'product');
           }
@@ -92,4 +152,19 @@ class IventoryScreen extends StatelessWidget   {
      
 
   }
+  BoxDecoration _buildBoxDecoration() {
+    return BoxDecoration(
+       color: Colors.white,
+       borderRadius: BorderRadius.circular(25),
+       boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(0,7),
+            blurRadius: 10
+        )
+      ]
+        
+      );
+
+  } 
 }

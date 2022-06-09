@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'package:productos_app/models/models.dart';
 import 'package:productos_app/providers/providers.dart';
+import 'package:productos_app/providers/selected_bussines_provider.dart';
 import 'package:productos_app/services/services.dart';
 import 'package:productos_app/ui/input_decorations.dart';
 import 'package:productos_app/widgets/widgets.dart';
@@ -22,10 +23,23 @@ class ProductScreen extends StatelessWidget {
 
     final authService = Provider.of<AuthService>(context);
 
+    return MultiProvider(
+      providers: [
 
-    return ChangeNotifierProvider(
-      create: ( _ ) => ProductsService(userToken:authService.userToken ),
-      child:_ProducsScreenAssistant());
+        ChangeNotifierProvider(
+          create: ( _ ) => ProductsService(userToken:authService.userToken ),
+          ),
+
+           ChangeNotifierProvider(
+              create: (_)=>BussinesService(userToken:authService.userToken),
+            ),
+
+      ],
+       child:_ProducsScreenAssistant()
+      
+      
+      );
+    
     
   }
 }
@@ -38,12 +52,17 @@ class _ProducsScreenAssistant extends StatelessWidget {
 
     final productService = Provider.of<ProductsService>(context);
     final selectedProduct=Provider.of<SelectedProduct>(context).selectedProduct;
+    final bussines=Provider.of<BussinesService>(context);
+   
+
+
+   
     productService.selectedProduct=selectedProduct!;
 
     print('respuesta del product Screen: `${productService.selectedProduct}`');
     return  ChangeNotifierProvider(
       create: ( _ ) => ProductFormProvider( productService.selectedProduct),
-      child: _ProductScreenBody(productService: productService),
+      child: _ProductScreenBody(productService: productService, bussinesService: bussines,),
     );
   }
 }
@@ -51,17 +70,19 @@ class _ProducsScreenAssistant extends StatelessWidget {
 class _ProductScreenBody extends StatelessWidget {
   const _ProductScreenBody({
     Key? key,
-    required this.productService,
+    required this.productService,required this.bussinesService,
   }) : super(key: key);
 
   final ProductsService productService;
+  final BussinesService bussinesService;
+  
 
   @override
   Widget build(BuildContext context) {
 
     
     final productForm = Provider.of<ProductFormProvider>(context);
-
+   
     return Scaffold(
       appBar: AppBar(
           title:Text('Editar-Producto'),
@@ -153,7 +174,7 @@ class _ProductScreenBody extends StatelessWidget {
         
               
         
-            _ProductForm(productService:productService),
+            _ProductForm(productService:productService,bussinesService:bussinesService),
         
             
           ],
@@ -329,8 +350,9 @@ class _CustomInputQR extends StatelessWidget {
 class _ProductForm extends StatelessWidget {
 
     final ProductsService productService;
+    final BussinesService bussinesService;
 
-    _ProductForm({required this.productService});
+    _ProductForm({required this.productService,required this.bussinesService});
 
   @override
   Widget build(BuildContext context) {
@@ -420,64 +442,38 @@ class _ProductForm extends StatelessWidget {
              SizedBox( height: 15 ),
             
              Container(
+               alignment: AlignmentDirectional.center,
             padding:const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                   onPressed:
-                    Provider.of<SelectedProduct>(context,listen: false).isSelected==false
-                    ?
-                    null
-                    :
-                     productService.isDeleting==true
-                    ?null
-                    :() {
+            child: TextButton(
+              child: Container(
+                alignment: AlignmentDirectional.center,
+                width:500,
+               padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
+                decoration: _boxDecorationDelete(color: Colors.indigo),
+                child: Text(
+                    productService.isSaving==true
+                    ?'Espere'
+                    :'Guardar',style: TextStyle(color: Colors.white),),
+              ),
+              onPressed: productService.isSaving==true
+              ? null
+              : () async {
+            
+              if ( !productForm.isValidForm() ) return;
+            
+              final String? imageUrl = await productService.uploadImage();
+            
+              if ( imageUrl != null ) productForm.product.picture = imageUrl;
 
-                      displayDialogAndroid(context,productService,productForm.product);
+             final selectedBussines=Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines;
+             final referenceNumber= selectedBussines!.referenceNumber;
 
-                      
-                    },
-                   child:Container(
-                     padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
-                     decoration: _boxDecorationDelete(color:Colors.red),
-                     child: Text(
-                       Provider.of<SelectedProduct>(context).isSelected==false
-                       ?
-                       'Deshabilitado'
-                       :
-                       productService.isDeleting==true
-                       ?'Espere'
-                       :'Eliminar',style: TextStyle(color: Colors.white),),
-                   ) 
-                 ),
-            
-                SizedBox(width: 20,),
-            
-                 TextButton(
-                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
-                     decoration: _boxDecorationDelete(color: Colors.indigo),
-                     child: Text(
-                         productService.isDeleting==true
-                         ?'Espere'
-                         :'Guardar',style: TextStyle(color: Colors.white),),
-                   ),
-                   onPressed: productService.isSaving 
-                   ? null
-                   : () async {
-            
-                   if ( !productForm.isValidForm() ) return;
-            
-                   final String? imageUrl = await productService.uploadImage();
-            
-                   if ( imageUrl != null ) productForm.product.picture = imageUrl;
-            
-                   await productService.saveOrCreateProduct(productForm.product);
-                   Navigator.pushReplacementNamed(context, 'home');
-                  },
-                 )
-              ],
+              selectedBussines.referenceNumber=referenceNumber!+1;
+
+              await bussinesService.saveOrCreateBussines(selectedBussines);
+              await productService.saveOrCreateProduct(productForm.product);
+              Navigator.pushReplacementNamed(context, 'home');
+             },
             ),
           ),
               

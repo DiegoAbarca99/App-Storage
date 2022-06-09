@@ -7,4 +7,5 @@ export 'package:productos_app/screens/register_screen.dart';
 export 'package:productos_app/screens/check_auth_screen.dart';
 export 'package:productos_app/screens/bussines_screen.dart';
 export 'package:productos_app/screens/iventory_screen.dart';
+export'package:productos_app/screens/view_product_screen.dart';
 

@@ -22,7 +22,7 @@ late String? userToken;
 
   
   BussinesService({this.userToken}){
-    //this.loadProducts();
+    //this.loadBussineses();
   }
 
   Future loadBussineses() async{
@@ -90,6 +90,8 @@ late String? userToken;
         element.description=bussines.description;
         element.bussinesName=bussines.bussinesName;
         element.kindBussines=bussines.kindBussines;
+        element.totalCost=bussines.totalCost;
+        element.referenceNumber=bussines.referenceNumber;
 
 
       }else{

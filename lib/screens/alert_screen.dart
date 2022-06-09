@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:productos_app/models/bussines.dart';
 import 'package:productos_app/providers/providers.dart';
+import 'package:productos_app/providers/selected_bussines_provider.dart';
 import 'package:productos_app/services/bussines_service.dart';
 import 'package:productos_app/services/services.dart';
 import 'package:productos_app/ui/input_decorations.dart';
@@ -28,6 +29,8 @@ class AlertScreen extends StatelessWidget {
       totalExpenses:null,
       totalSales:null, 
       utility: null,
+      totalCost: 0,
+      referenceNumber: 0
       );
     return MultiProvider(
       providers: [
@@ -87,6 +90,8 @@ class _AlertScreenBody extends StatelessWidget {
 
                     bussinesForm.isLoading=true;
 
+
+                    Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines=bussinesForm.bussines!;
                     bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
 
                     bussinesForm.isLoading=false;
