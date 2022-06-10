@@ -1,28 +1,35 @@
+
+
+import 'dart:async';
 import 'dart:convert';
 
-
 import 'package:flutter/material.dart';
-import 'package:productos_app/models/models.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:productos_app/models/models.dart';
 import 'package:http/http.dart' as http;
 
 
-class BussinesService extends ChangeNotifier {
+class BussinesService extends ChangeNotifier{
+  late String? userToken;
 
+  final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
 
-final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
-bool isLoading=true;
-bool isSaving=false;
-bool isDeleting=false;
-final List<Bussines> bussineses=[];
-late final Bussines? selectedBussines;
-final storage=FlutterSecureStorage();
+  final List<Bussines> bussineses=[];
+ 
+  bool isLoading=true;
+  bool isSaving=false;
+  bool isDeleting=false;
 
-late String? userToken;
+  final storage=FlutterSecureStorage();
+  
+
+   
+  
 
   
+  
   BussinesService({this.userToken}){
-    //this.loadBussineses();
+    this.loadBussineses();
   }
 
   Future loadBussineses() async{
@@ -40,7 +47,7 @@ late String? userToken;
 
    final Map <String,dynamic>? bussinesesMap=json.decode(resp.body);
 
-   print('Respuesta del Bussineses service: `${resp.body}`');
+   print('Respuesta: `${resp.body}`');
    bussinesesMap==null?null:
    bussinesesMap.forEach((key,value){//Parsea el mapa que posee un key exterior y a cada uno se le asigna un objeto del tipo producto
      final tempBussines=Bussines.fromMap(value);
@@ -78,21 +85,20 @@ late String? userToken;
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.put(url,body: bussines.toJson());
-  
+   final decodeData=resp.body;
+   print(resp.body);
 
-    bussineses.forEach((element) {
+      bussineses.forEach((element) {
       if(element.id==bussines.id){
-        element.utility=bussines.utility;
-        element.totalSales=bussines.totalExpenses;
-        element.direction=bussines.direction;
         element.ownerName=bussines.ownerName;
-        element.totalExpenses=bussines.totalExpenses;
+        element.kindBussines=bussines.kindBussines;
         element.description=bussines.description;
         element.bussinesName=bussines.bussinesName;
-        element.kindBussines=bussines.kindBussines;
-        element.totalCost=bussines.totalCost;
         element.referenceNumber=bussines.referenceNumber;
-
+        element.totalCost=bussines.totalCost;
+        element.totalExpenses=bussines.totalExpenses;
+        element.totalSales=bussines.totalSales;
+        element.utility=bussines.utility;
 
       }else{
         return;
@@ -127,7 +133,7 @@ late String? userToken;
   }
 
 
-  Future deleteBussines(Bussines bussines) async{
+  Future deleteBussineses(Bussines bussines) async{
     isDeleting=true;
     notifyListeners();
 
@@ -148,9 +154,4 @@ late String? userToken;
 
 
   }
-
-
 }
-
-
-

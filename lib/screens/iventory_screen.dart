@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/providers/providers.dart';
+import 'package:productos_app/search/product_search_delegate.dart';
 import 'package:provider/provider.dart';
 
 import 'package:productos_app/models/models.dart';
@@ -22,7 +23,21 @@ class IventoryScreen extends StatelessWidget   {
    
 
     final productsService = Provider.of<ProductsService>(context);
-    final selectedBussines=Provider.of<SelectedBussinesProvider>(context).selectedBussines;
+
+        
+     final selectedBussines=Provider.of<SelectedBussinesProvider>(context).selectedBussines;
+
+  
+
+   
+      
+
+        
+
+ 
+
+
+    
 
     final size=MediaQuery.of(context).size;
 
@@ -43,6 +58,11 @@ class IventoryScreen extends StatelessWidget   {
 
                     selectedBussines!.totalCost=accumulator;
 
+                     Future.delayed(Duration.zero,(){
+                          Provider.of<BussinesService>(context,listen: false).saveOrCreateBussines(selectedBussines);
+                    });
+                    
+
                     print('costo total: ${selectedBussines.totalCost}, acumulador: $accumulator, producto: $multiplication'  , );
 
   
@@ -52,8 +72,23 @@ class IventoryScreen extends StatelessWidget   {
      return   Column(
        children: [
 
+        Container(
+          decoration: _buildBoxDecoration(),
+          child: MaterialButton(
+            onPressed: () async {
+              
+             
+              showSearch(context: context, delegate: ProductSearchDelegate(productsSearch: await productsService.searchProducts()));
+
+            },
+            child: Icon(Icons.search,color: Colors.indigo,),
+            ),
+        ),
+
+
+
           Container(
-            height:size.height*0.23,
+            height:size.height*0.15,
             width:double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -68,7 +103,7 @@ class IventoryScreen extends StatelessWidget   {
                         
                         Text('Total de referencias'),
                         
-                        Text('${selectedBussines!.referenceNumber.toString()}')
+                        Text('${selectedBussines.referenceNumber.toString()}')
                         
                           
                         ],

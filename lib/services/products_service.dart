@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -15,6 +16,7 @@ class ProductsService extends ChangeNotifier{
   final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
 
   final List<Product> products=[];
+  final List<Product> productsSearch=[];
   bool isLoading=true;
   bool isSaving=false;
   bool isDeleting=false;
@@ -23,6 +25,8 @@ class ProductsService extends ChangeNotifier{
   final storage=FlutterSecureStorage();
 
 
+   
+  
 
   
   
@@ -187,5 +191,37 @@ class ProductsService extends ChangeNotifier{
     return decodeData['secure_url'];
 
   }
+
+
+
+  Future<List<Product>> searchProducts() async {
+
+
+
+
+   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
+     'auth':await storage.read(key: 'token')??''
+   });
+   final resp= await http.get(url);
+
+   final Map <String,dynamic>? productsMap=json.decode(resp.body);
+
+   print('Respuesta del search: `${resp.body}`');
+    productsMap==null?null:
+   productsMap.forEach((key,value){//Parsea el mapa que posee un key exterior y a cada uno se le asigna un objeto del tipo producto
+     final tempProduct=Product.fromMap(value);
+     tempProduct.id=key;
+     productsSearch.add(tempProduct);
+   });
+
+   return productsSearch;
+
+ 
+   
+
+  }
+
+
+
 
 }

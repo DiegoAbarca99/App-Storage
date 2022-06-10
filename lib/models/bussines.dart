@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'dart:ffi';
+
 
 class Bussines {
     Bussines({
@@ -24,9 +24,9 @@ class Bussines {
     int? referenceNumber;
     double?totalCost;
     String? id;
-    Double? utility;
-    Double? totalSales;
-    Double? totalExpenses;
+    double? utility;
+    double? totalSales;
+    double? totalExpenses;
     String? ownerName;
     String? kindBussines;
     String? bussinesName;
@@ -46,7 +46,7 @@ class Bussines {
         totalSales:json["TotalSales"],
         totalExpenses: json["TotalExpenses"],
         description: json["Description"],
-        referenceNumber: json["ReferenceNumber"]==null?0:int.parse(json["ReferenceNumber"],),
+        referenceNumber: json["ReferenceNumber"],
         totalCost: json["TotalCost"]==null?0:json["TotalCost"].toDouble()
 
         

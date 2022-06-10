@@ -1,15 +1,10 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:productos_app/models/bussines.dart';
 import 'package:productos_app/providers/providers.dart';
-import 'package:productos_app/providers/selected_bussines_provider.dart';
-import 'package:productos_app/services/bussines_service.dart';
+
 import 'package:productos_app/services/services.dart';
 import 'package:productos_app/ui/input_decorations.dart';
-import 'package:productos_app/widgets/card_container.dart';
-import 'package:productos_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 
@@ -90,9 +85,13 @@ class _AlertScreenBody extends StatelessWidget {
 
                     bussinesForm.isLoading=true;
 
+                      bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
+                      Provider.of<SelectedBussinesProvider>(context,listen:false).selectedBussines=bussinesForm.bussines!;
 
-                    Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines=bussinesForm.bussines!;
-                    bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
+
+                    
+
+                   
 
                     bussinesForm.isLoading=false;
 
