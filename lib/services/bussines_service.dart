@@ -35,6 +35,7 @@ class BussinesService extends ChangeNotifier{
   Future loadBussineses() async{
 
     bussineses.clear();
+    print("Cargando load bussineses");
 
     isLoading=true;
     notifyListeners();
@@ -47,13 +48,15 @@ class BussinesService extends ChangeNotifier{
 
    final Map <String,dynamic>? bussinesesMap=json.decode(resp.body);
 
-   print('Respuesta: `${resp.body}`');
+   print('Respuesta del load bussineses: `${resp.body}`');
    bussinesesMap==null?null:
    bussinesesMap.forEach((key,value){//Parsea el mapa que posee un key exterior y a cada uno se le asigna un objeto del tipo producto
      final tempBussines=Bussines.fromMap(value);
      tempBussines.id=key;
      bussineses.add(tempBussines);
    });
+
+   
 
    isLoading=false;
    notifyListeners();
@@ -124,6 +127,8 @@ class BussinesService extends ChangeNotifier{
    bussines.id=decodeData['name'];
    bussineses.add(bussines);
    print(resp.body);
+
+   
 
     
 

@@ -14,8 +14,9 @@ import 'package:productos_app/widgets/widgets.dart';
 class IventoryScreen extends StatelessWidget   {
    
   final AuthService authService;
+  final BussinesService bussinesService;
 
-  const IventoryScreen({Key? key,required this.authService}) : super(key: key);
+  const IventoryScreen({Key? key,required this.authService,required this.bussinesService}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class IventoryScreen extends StatelessWidget   {
         
      final selectedBussines=Provider.of<SelectedBussinesProvider>(context).selectedBussines;
 
-  
+    
 
    
       

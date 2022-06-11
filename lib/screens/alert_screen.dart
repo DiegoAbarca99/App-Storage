@@ -76,7 +76,7 @@ class _AlertScreenBody extends StatelessWidget {
 
 
                TextButton(
-                onPressed: bussinesForm.isLoading?null: () {
+                onPressed: bussinesForm.isLoading?null: () async  {
                    final authService= Provider.of<AuthService>(context,listen:false);
 
                     FocusScope.of(context).unfocus();
@@ -85,7 +85,7 @@ class _AlertScreenBody extends StatelessWidget {
 
                     bussinesForm.isLoading=true;
 
-                      bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
+                      await bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
                       Provider.of<SelectedBussinesProvider>(context,listen:false).selectedBussines=bussinesForm.bussines!;
 
 

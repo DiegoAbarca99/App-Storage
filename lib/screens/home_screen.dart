@@ -41,7 +41,9 @@ class HomeScreen extends StatelessWidget {
               },
            ),
         ),
-        body: _HomeScreenBody(authService: authService),
+        body: ChangeNotifierProvider(
+          create: (_)=>BussinesService(userToken:authService.userToken),
+          child: _HomeScreenBody(authService: authService)),
         bottomNavigationBar:CustomBottomNavigatorBar()
       );
       
@@ -64,8 +66,19 @@ class _HomeScreenBody extends StatelessWidget   {
   const _HomeScreenBody({Key? key,required this.authService}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
 
+     final bussinesService=Provider.of<BussinesService>(context,listen:false);
+   
+
+     
+    Future.delayed(Duration.zero,()async{
+       await bussinesService.loadBussineses();
+       print("Bussines desde el homescreen:${bussinesService.bussineses}");
+       Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines=bussinesService.bussineses[0];
+        
+    });
+    
      final currentIndex=Provider.of<UiProvider>(context).selectMenuOpt;
     
     switch (currentIndex) {
@@ -76,17 +89,13 @@ class _HomeScreenBody extends StatelessWidget   {
           );
 
       case 1:
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_)=>BussinesService(userToken:authService.userToken),
-            ),
-            ChangeNotifierProvider(
+        return  ChangeNotifierProvider(
               create: (_)=>ProductsService(userToken:authService.userToken ),
-            ),   
-          ],
-          child:IventoryScreen(authService: authService) ,
-        );   
+              child:IventoryScreen(authService: authService,bussinesService:bussinesService ,) ,
+            );   
+          
+          
+           
       default:
         return const BussinesScreen();
     }
