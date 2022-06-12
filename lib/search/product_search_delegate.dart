@@ -12,8 +12,12 @@ class ProductSearchDelegate extends  SearchDelegate{
   List<Product> _filter=[];
 
   List<Product> productsSearch;
+  BussinesService bussinesService;
+  String bussinesToken;
+  Bussines selectedBussines;
 
-  ProductSearchDelegate({required this.productsSearch});
+
+  ProductSearchDelegate({required this.productsSearch,required this.bussinesService,required this.bussinesToken,required this.selectedBussines});
 
   @override
   String? get searchFieldLabel => 'Buscar producto';
@@ -76,7 +80,7 @@ class ProductSearchDelegate extends  SearchDelegate{
                     return GestureDetector(
                       onTap: () {
                         Provider.of<SelectedProduct>(context,listen: false).selectedProduct = _filter[index].copy();
-                        Navigator.pushNamed(context, 'viewproduct');
+                        Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);
                     },
                       child: ProductCard(product: _filter[index]),
                  );

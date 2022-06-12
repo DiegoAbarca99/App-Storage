@@ -21,21 +21,26 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final list=ModalRoute.of(context)!.settings.arguments as List;
+    final bussinesService=list[0];
+    final bussinesToken=list[1];
+    final selectedBussines=list[2];
+   
+
     final authService = Provider.of<AuthService>(context);
+    print("Busineess token desde product screen !!!!!! $bussinesToken");
 
     return MultiProvider(
       providers: [
 
         ChangeNotifierProvider(
-          create: ( _ ) => ProductsService(userToken:authService.userToken ),
+          create: ( _ ) => ProductsService(userToken:authService.userToken,bussinesToken: bussinesToken ),
           ),
 
-           ChangeNotifierProvider(
-              create: (_)=>BussinesService(userToken:authService.userToken),
-            ),
+         
 
       ],
-       child:_ProducsScreenAssistant()
+       child:_ProducsScreenAssistant(bussinesService: bussinesService, selectedBussines:selectedBussines)
       
       
       );
@@ -45,14 +50,18 @@ class ProductScreen extends StatelessWidget {
 }
 
 class _ProducsScreenAssistant extends StatelessWidget {
-  const _ProducsScreenAssistant({Key? key}) : super(key: key);
+
+  final BussinesService bussinesService;
+  final Bussines selectedBussines;
+
+  const _ProducsScreenAssistant({Key? key,required this.bussinesService,required this.selectedBussines}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     final productService = Provider.of<ProductsService>(context);
     final selectedProduct=Provider.of<SelectedProduct>(context).selectedProduct;
-    final bussines=Provider.of<BussinesService>(context);
+ 
    
 
 
@@ -62,7 +71,7 @@ class _ProducsScreenAssistant extends StatelessWidget {
     print('respuesta del product Screen: `${productService.selectedProduct}`');
     return  ChangeNotifierProvider(
       create: ( _ ) => ProductFormProvider( productService.selectedProduct),
-      child: _ProductScreenBody(productService: productService, bussinesService: bussines,),
+      child: _ProductScreenBody(productService: productService, bussinesService: bussinesService, selectedBussines: selectedBussines,),
     );
   }
 }
@@ -70,11 +79,12 @@ class _ProducsScreenAssistant extends StatelessWidget {
 class _ProductScreenBody extends StatelessWidget {
   const _ProductScreenBody({
     Key? key,
-    required this.productService,required this.bussinesService,
+    required this.productService,required this.bussinesService,required this.selectedBussines,
   }) : super(key: key);
 
   final ProductsService productService;
   final BussinesService bussinesService;
+  final Bussines selectedBussines;
   
 
   @override
@@ -174,7 +184,7 @@ class _ProductScreenBody extends StatelessWidget {
         
               
         
-            _ProductForm(productService:productService,bussinesService:bussinesService),
+            _ProductForm(productService:productService,bussinesService:bussinesService,selectedBussines: selectedBussines,),
         
             
           ],
@@ -351,8 +361,9 @@ class _ProductForm extends StatelessWidget {
 
     final ProductsService productService;
     final BussinesService bussinesService;
+    final Bussines selectedBussines;
 
-    _ProductForm({required this.productService,required this.bussinesService});
+    _ProductForm({required this.productService,required this.bussinesService,required this.selectedBussines});
 
   @override
   Widget build(BuildContext context) {
@@ -465,12 +476,18 @@ class _ProductForm extends StatelessWidget {
             
               if ( imageUrl != null ) productForm.product.picture = imageUrl;
 
-             final selectedBussines=Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines;
-             final referenceNumber= selectedBussines!.referenceNumber;
 
-              selectedBussines.referenceNumber=referenceNumber!+1;
+                  final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
+                  
+                  if(referenceNumber.isAdd==true){
+                      referenceNumber.referenceNum=referenceNumber.referenceNum!+1;
+                  }
+                
+                  
+                
+                  
 
-              await bussinesService.saveOrCreateBussines(selectedBussines);
+          
               await productService.saveOrCreateProduct(productForm.product);
               Navigator.pushReplacementNamed(context, 'home');
              },
@@ -485,59 +502,7 @@ class _ProductForm extends StatelessWidget {
     );
   }
 
-     void displayDialogAndroid(BuildContext context,ProductsService productService,Product? selectedProduct){
-     
-       
-
-           showDialog(
-
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-           
-          return AlertDialog(
-            
-     
-            elevation: 5,
-            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            title: const Text('Advertencia',style: TextStyle(color: Colors.red)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text('¿Esta seguro que desea eliminar el producto?',),
-                SizedBox(height: 10,),
-              ],
-            ),
-
-            actions: [TextButton(
-              onPressed: (){
-                  Navigator.pushReplacementNamed(context,'product');//Cierra la imagen al presionar el texbutton de cancelar
-              },
-             child: const Text('Cancelar',style: TextStyle(color:Colors.blue),)
-             ),
-             TextButton(
-              onPressed: ()async{
-                  Navigator.pushReplacementNamed(context,'home');
-                  await  productService.deleteProduct(selectedProduct!);
-                  
-              },
-             child: const Text('Aceptar',style: TextStyle(color:Colors.red))
-             )
-             
-             
-             
-             
-             ],
-
-          );
-        },
-        
-      
-       );
-
-     
-  }
-
+    
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
     color: Colors.white,
     boxShadow: [

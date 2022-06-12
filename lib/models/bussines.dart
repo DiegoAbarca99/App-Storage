@@ -65,4 +65,6 @@ class Bussines {
         "TotalCost":totalCost
         
     };
+
+    toString()=>"id: $id, ownerBussines: $ownerName";
 }

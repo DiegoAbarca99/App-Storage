@@ -15,8 +15,10 @@ class IventoryScreen extends StatelessWidget   {
    
   final AuthService authService;
   final BussinesService bussinesService;
+  final Bussines selectedBussines;
+  final String bussinesToken;
 
-  const IventoryScreen({Key? key,required this.authService,required this.bussinesService}) : super(key: key);
+  const IventoryScreen({Key? key,required this.authService,required this.bussinesService,required this.selectedBussines, required this.bussinesToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +27,11 @@ class IventoryScreen extends StatelessWidget   {
 
     final productsService = Provider.of<ProductsService>(context);
 
-        
-     final selectedBussines=Provider.of<SelectedBussinesProvider>(context).selectedBussines;
-
-    
-
-   
+      final referenceNumber=Provider.of<ReferenceNumberProvider>(context);
+       
       
-
-        
-
- 
-
+   
+     
 
     
 
@@ -57,14 +52,11 @@ class IventoryScreen extends StatelessWidget   {
                         accumulator=accumulator+multiplication[i];
                     }
 
-                    selectedBussines!.totalCost=accumulator;
+                    selectedBussines.totalCost=accumulator;
 
-                     Future.delayed(Duration.zero,(){
-                          Provider.of<BussinesService>(context,listen: false).saveOrCreateBussines(selectedBussines);
-                    });
-                    
+                   
 
-                    print('costo total: ${selectedBussines.totalCost}, acumulador: $accumulator, producto: $multiplication'  , );
+                   
 
   
     
@@ -73,23 +65,35 @@ class IventoryScreen extends StatelessWidget   {
      return   Column(
        children: [
 
-        Container(
-          decoration: _buildBoxDecoration(),
-          child: MaterialButton(
-            onPressed: () async {
-              
-             
-              showSearch(context: context, delegate: ProductSearchDelegate(productsSearch: await productsService.searchProducts()));
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal:27,vertical: 15),
+          child: Container(
+            padding:EdgeInsets.symmetric(horizontal: 10),
+            decoration: _buildBoxDecoration(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal:8.0),
+              child: MaterialButton(
+                onPressed: () async {
+                  
+                 
+                  showSearch(context: context, delegate: ProductSearchDelegate(productsSearch: await productsService.searchProducts(), bussinesService: bussinesService, bussinesToken: bussinesToken, selectedBussines: selectedBussines));
 
-            },
-            child: Icon(Icons.search,color: Colors.indigo,),
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.search,color: Colors.indigo,),
+                    Text("Buscar en el inventario",style: Theme.of(context).textTheme.headline6,),
+                  ],
+                ),
+                ),
             ),
+          ),
         ),
 
 
 
           Container(
-            height:size.height*0.15,
+            height:size.height*0.10,
             width:double.infinity,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -104,7 +108,7 @@ class IventoryScreen extends StatelessWidget   {
                         
                         Text('Total de referencias'),
                         
-                        Text('${selectedBussines.referenceNumber.toString()}')
+                        Text('${referenceNumber.referenceNum.toString()}')
                         
                           
                         ],
@@ -138,10 +142,13 @@ class IventoryScreen extends StatelessWidget   {
                 itemCount: productsService.products.length,
                 itemBuilder: ( BuildContext context, int index ) {
 
+                   
+
                     return GestureDetector(
                       onTap: () {
+                         referenceNumber.isAdd=false;
                         Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
-                        Navigator.pushNamed(context, 'viewproduct');
+                        Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);
                     },
                       child: ProductCard(product: productsService.products[index]),
                  );
@@ -165,6 +172,8 @@ class IventoryScreen extends StatelessWidget   {
               ),
               onPressed:() async {
 
+                Provider.of<ReferenceNumberProvider>(context,listen:false).isAdd=true;
+
                 Provider.of<SelectedProduct>(context,listen: false).selectedProduct= new Product(
                  name: '', 
                  sellPrice: 0, 
@@ -175,7 +184,7 @@ class IventoryScreen extends StatelessWidget   {
                 );
 
           
-             Navigator.pushNamed(context, 'product');
+             Navigator.pushNamed(context, 'product',arguments: [bussinesService,bussinesToken,selectedBussines]);
           }
           
           ), 

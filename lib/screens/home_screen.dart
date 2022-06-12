@@ -67,19 +67,26 @@ class _HomeScreenBody extends StatelessWidget   {
 
   @override
   Widget build(BuildContext context)  {
-
-     final bussinesService=Provider.of<BussinesService>(context,listen:false);
-   
-
-     
-    Future.delayed(Duration.zero,()async{
-       await bussinesService.loadBussineses();
-       print("Bussines desde el homescreen:${bussinesService.bussineses}");
-       Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines=bussinesService.bussineses[0];
-        
-    });
     
-     final currentIndex=Provider.of<UiProvider>(context).selectMenuOpt;
+      Bussines selectedBussines;
+      String? selectedUserBussines;
+
+
+      final bussinesService= Provider.of<BussinesService>(context,listen: true);
+
+
+
+     if(bussinesService.isLoading==false){
+         print("Bussines desde el homescreen:${bussinesService.bussineses}");
+         
+            selectedBussines=bussinesService.bussineses[0];    
+            selectedUserBussines=bussinesService.bussineses[0].id;
+         
+
+          final currentIndex=Provider.of<UiProvider>(context).selectMenuOpt;
+          final bussinesToken= selectedUserBussines;
+           print("Business token desde el homescreen: $bussinesToken ");
+
     
     switch (currentIndex) {
       case 0 :
@@ -90,8 +97,8 @@ class _HomeScreenBody extends StatelessWidget   {
 
       case 1:
         return  ChangeNotifierProvider(
-              create: (_)=>ProductsService(userToken:authService.userToken ),
-              child:IventoryScreen(authService: authService,bussinesService:bussinesService ,) ,
+              create: (_)=>ProductsService(userToken:authService.userToken,bussinesToken: bussinesToken ),
+              child:IventoryScreen(authService: authService,bussinesService:bussinesService, selectedBussines:selectedBussines, bussinesToken: bussinesToken!, ) ,
             );   
           
           
@@ -99,6 +106,20 @@ class _HomeScreenBody extends StatelessWidget   {
       default:
         return const BussinesScreen();
     }
+
+
+
+
+        
+     }
+  
+       
+    
+        
+
+  return Container();
+    
+   
 
  
 

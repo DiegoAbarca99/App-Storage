@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 class ProductsService extends ChangeNotifier{
   late String? userToken;
+  late String? bussinesToken;
 
   final String _baseUrl='storage-app-c9bb6-default-rtdb.firebaseio.com';
 
@@ -23,14 +24,9 @@ class ProductsService extends ChangeNotifier{
   late Product selectedProduct;
   File? newPictureFile;
   final storage=FlutterSecureStorage();
-
-
-   
+ 
   
-
-  
-  
-  ProductsService({this.userToken}){
+  ProductsService({this.userToken,this.bussinesToken}){
     this.loadProducts();
   }
 
@@ -42,7 +38,7 @@ class ProductsService extends ChangeNotifier{
     notifyListeners();
 
 
-   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Bussineses/$bussinesToken/Products.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.get(url);
@@ -82,8 +78,10 @@ class ProductsService extends ChangeNotifier{
   }
 
   Future<String> updateProduct(Product product) async{
+
+      print("Impresion del bussinesToken antes de actualizar el producto: $bussinesToken");
     
-   final url= Uri.https(_baseUrl,'$userToken/Products/${product.id}.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Bussineses/$bussinesToken/Products/${product.id}.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.put(url,body: product.toJson());
@@ -108,15 +106,17 @@ class ProductsService extends ChangeNotifier{
 
     });
 
-
+  print("Se ha actualizado el producto con id:${product.id!}");
    return product.id!;
 
   }
 
   
   Future<String> createProduct(Product product) async{
+
+    print("Impresion del bussinesToken antes de crear producto: $bussinesToken");
     
-   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Bussineses/$bussinesToken/Products.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.post(url,body: product.toJson());
@@ -127,7 +127,7 @@ class ProductsService extends ChangeNotifier{
    print(resp.body);
 
     
-
+  print("Se ha creado un producto!!!!!!!");
 
    return product.id!;
 
@@ -139,7 +139,7 @@ class ProductsService extends ChangeNotifier{
     notifyListeners();
 
 
-    final url= Uri.https(_baseUrl,'$userToken/Products/${product.id}.json',{
+    final url= Uri.https(_baseUrl,'$userToken/Bussineses/$bussinesToken/Products/${product.id}.json',{
      'auth':await storage.read(key: 'token')??''
    });
 
@@ -199,7 +199,7 @@ class ProductsService extends ChangeNotifier{
 
 
 
-   final url= Uri.https(_baseUrl,'$userToken/Products.json',{
+   final url= Uri.https(_baseUrl,'$userToken/Bussineses/$bussinesToken/Products.json',{
      'auth':await storage.read(key: 'token')??''
    });
    final resp= await http.get(url);

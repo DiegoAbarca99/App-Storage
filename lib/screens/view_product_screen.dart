@@ -13,35 +13,40 @@ class ViewProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+
+    final list=ModalRoute.of(context)!.settings.arguments as List;
+    final bussinesService=list[0];
+    final bussinesToken=list[1];
+    final selectedBussines=list[2];
     final userToken=Provider.of<AuthService>(context).userToken;
+
+    print("Busineess token desde view product !!!!!! $bussinesToken");
 
     return MultiProvider(
       providers: [
          ChangeNotifierProvider(
-           create: ( _ ) => ProductsService(userToken:userToken ),
+           create: ( _ ) => ProductsService(userToken:userToken,bussinesToken: bussinesToken ),
           ),
 
-        ChangeNotifierProvider(
-           create: (_)=>BussinesService(userToken:userToken),
-        ),
-
       ],
-      child: ViewProductScreenBody(),
+      child: ViewProductScreenBody(bussinesService: bussinesService, bussinesToken: bussinesToken, selectedBussines: selectedBussines,),
       );
     
   }
 }
 
 class ViewProductScreenBody extends StatelessWidget {
-  const ViewProductScreenBody({Key? key}) : super(key: key);
+  final String bussinesToken;
+  final Bussines selectedBussines;
+  final BussinesService bussinesService;
+
+  const ViewProductScreenBody({Key? key,required this.bussinesService,required this.selectedBussines,required this.bussinesToken}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
    final selectedProduct=Provider.of<SelectedProduct>(context);
    final productService=Provider.of<ProductsService>(context);
-   final bussinesService=Provider.of<BussinesService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -156,7 +161,7 @@ class ViewProductScreenBody extends StatelessWidget {
                         ?null
                         :() {
 
-                          displayDialogAndroid(context,productService,selectedProduct.selectedProduct,bussinesService);
+                          displayDialogAndroid(context,productService,selectedProduct.selectedProduct,bussinesService,selectedBussines);
 
                           
                         },
@@ -175,7 +180,7 @@ class ViewProductScreenBody extends StatelessWidget {
                         MaterialButton(
                        onPressed:() {
 
-                          Navigator.pushReplacementNamed(context,'product');
+                          Navigator.pushReplacementNamed(context,'product',arguments: [bussinesService,bussinesToken,selectedBussines] );
 
                           
                         },
@@ -198,7 +203,7 @@ class ViewProductScreenBody extends StatelessWidget {
     
   }
 
-  void displayDialogAndroid(BuildContext context,ProductsService productService,Product? selectedProduct,BussinesService bussinesService){
+  void displayDialogAndroid(BuildContext context,ProductsService productService,Product? selectedProduct,BussinesService bussinesService,Bussines selectedBussines){
      
        
 
@@ -231,15 +236,17 @@ class ViewProductScreenBody extends StatelessWidget {
              TextButton(
               onPressed: ()async{
 
-                  final selectedBussines=Provider.of<SelectedBussinesProvider>(context,listen: false).selectedBussines;
-                  final referenceNumber= selectedBussines!.referenceNumber;
+                
+
+                  
+                  final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
                   
 
-                  selectedBussines.referenceNumber=referenceNumber!-1;
+                  referenceNumber.referenceNum=referenceNumber.referenceNum!-1;
                   
-
-                  await bussinesService.saveOrCreateBussines(selectedBussines);
                   await  productService.deleteProduct(selectedProduct!);
+                  
+                  
 
                   Navigator.pushReplacementNamed(context,'home');
                   

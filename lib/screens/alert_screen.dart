@@ -84,8 +84,9 @@ class _AlertScreenBody extends StatelessWidget {
                     if(!bussinesForm.isValidBussinesForm()) return;
 
                     bussinesForm.isLoading=true;
-
-                      await bussinesService.saveOrCreateBussines(bussinesForm.bussines!);
+    
+                       
+                      Provider.of<UserBussinesProvider>(context,listen:false).selectedUserBussines= await bussinesService.createBussines(bussinesForm.bussines!);
                       Provider.of<SelectedBussinesProvider>(context,listen:false).selectedBussines=bussinesForm.bussines!;
 
 

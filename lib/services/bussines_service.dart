@@ -20,6 +20,8 @@ class BussinesService extends ChangeNotifier{
   bool isSaving=false;
   bool isDeleting=false;
 
+  
+
   final storage=FlutterSecureStorage();
   
 
@@ -56,10 +58,13 @@ class BussinesService extends ChangeNotifier{
      bussineses.add(tempBussines);
    });
 
+
    
 
    isLoading=false;
    notifyListeners();
+
+
 
 
   }
@@ -110,7 +115,7 @@ class BussinesService extends ChangeNotifier{
 
     });
 
-
+  print("Busiiness idd!!!!! ${bussines.id}");
    return bussines.id!;
 
   }
@@ -132,7 +137,7 @@ class BussinesService extends ChangeNotifier{
 
     
 
-
+    print("Busiiness idd!!!!! ${bussines.id}");
    return bussines.id!;
 
   }
