@@ -242,7 +242,7 @@ class ViewProductScreenBody extends StatelessWidget {
                   final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
                   
 
-                  referenceNumber.referenceNum=referenceNumber.referenceNum!-1;
+                  referenceNumber.referenceNum=referenceNumber.referenceNum-1;
                   
                   await  productService.deleteProduct(selectedProduct!);
                   

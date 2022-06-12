@@ -480,7 +480,7 @@ class _ProductForm extends StatelessWidget {
                   final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
                   
                   if(referenceNumber.isAdd==true){
-                      referenceNumber.referenceNum=referenceNumber.referenceNum!+1;
+                      referenceNumber.referenceNum=referenceNumber.referenceNum+1;
                   }
                 
                   

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ReferenceNumberProvider extends ChangeNotifier {
  int _referenceNum=0;
  bool _isAdd=false;
+ 
 
    
   
@@ -12,6 +13,10 @@ class ReferenceNumberProvider extends ChangeNotifier {
       _referenceNum=value;
       notifyListeners();
   }
+
+
+ 
+
 
   bool get isAdd=>_isAdd;
 

@@ -28,6 +28,7 @@ class IventoryScreen extends StatelessWidget   {
     final productsService = Provider.of<ProductsService>(context);
 
       final referenceNumber=Provider.of<ReferenceNumberProvider>(context);
+
        
       
    
@@ -52,7 +53,12 @@ class IventoryScreen extends StatelessWidget   {
                         accumulator=accumulator+multiplication[i];
                     }
 
-                    selectedBussines.totalCost=accumulator;
+
+                    
+                  
+                        
+                
+                    
 
                    
 
@@ -126,7 +132,7 @@ class IventoryScreen extends StatelessWidget   {
                           
                         Text('Costo total'),
                           
-                        Text('${selectedBussines.totalCost.toString()}')
+                        Text('${accumulator.toString()}')
                         
                           
                         ],
@@ -142,10 +148,12 @@ class IventoryScreen extends StatelessWidget   {
                 itemCount: productsService.products.length,
                 itemBuilder: ( BuildContext context, int index ) {
 
-                   
+                  
+                  
 
                     return GestureDetector(
                       onTap: () {
+                       
                          referenceNumber.isAdd=false;
                         Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
                         Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);

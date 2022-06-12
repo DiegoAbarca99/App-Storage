@@ -24,8 +24,7 @@ class AlertScreen extends StatelessWidget {
       totalExpenses:null,
       totalSales:null, 
       utility: null,
-      totalCost: 0,
-      referenceNumber: 0
+    
       );
     return MultiProvider(
       providers: [

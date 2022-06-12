@@ -102,8 +102,6 @@ class BussinesService extends ChangeNotifier{
         element.kindBussines=bussines.kindBussines;
         element.description=bussines.description;
         element.bussinesName=bussines.bussinesName;
-        element.referenceNumber=bussines.referenceNumber;
-        element.totalCost=bussines.totalCost;
         element.totalExpenses=bussines.totalExpenses;
         element.totalSales=bussines.totalSales;
         element.utility=bussines.utility;
