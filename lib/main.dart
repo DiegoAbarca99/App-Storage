@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/providers/providers.dart';
 import 'package:productos_app/providers/selected_bussines_provider.dart';
+import 'package:productos_app/screens/view_bussines_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:productos_app/screens/screens.dart';
@@ -21,6 +22,7 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(create: ( _ ) => AuthService() ), 
         ChangeNotifierProvider(create: ( _ ) => UserBussinesProvider()) , 
         ChangeNotifierProvider(create: ( _ ) => ReferenceNumberProvider()) ,
+
       ],
       child: MyApp(),
     );
@@ -44,6 +46,8 @@ class MyApp extends StatelessWidget {
 
         'product' : ( _ ) => ProductScreen(),
         'viewproduct':( _ ) => ViewProductScreen(),
+
+        'viewbussines':       (_) => ViewBussinesScreen(),
          
 
         'login'   : ( _ ) => LoginScreen(),

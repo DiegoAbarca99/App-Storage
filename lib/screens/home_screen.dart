@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 
       return Scaffold(
         appBar: AppBar(
-          title: Text('Bienvenido'),
+          title: Text('App-Storage'),
           centerTitle: true,
           leading: IconButton(
               icon: Icon(Icons.login_outlined),
@@ -90,10 +90,7 @@ class _HomeScreenBody extends StatelessWidget   {
     
     switch (currentIndex) {
       case 0 :
-        return ChangeNotifierProvider(
-          create: (_)=>BussinesService(userToken: authService.userToken),
-          child: BussinesScreen(),
-          );
+        return BussinesScreen(selectedBussines: selectedBussines,bussinesService: bussinesService,);
 
       case 1:
         return  ChangeNotifierProvider(
@@ -104,7 +101,7 @@ class _HomeScreenBody extends StatelessWidget   {
           
            
       default:
-        return const BussinesScreen();
+        return  CircularProgressIndicator();
     }
 
 

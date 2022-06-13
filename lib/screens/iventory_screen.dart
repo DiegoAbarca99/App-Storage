@@ -88,7 +88,7 @@ class IventoryScreen extends StatelessWidget   {
                 child: Row(
                   children: [
                     Icon(Icons.search,color: Colors.indigo,),
-                    Text("Buscar en el inventario",style: Theme.of(context).textTheme.headline6,),
+                    Text("Buscar en el inventario",style: Theme.of(context).textTheme.caption,),
                   ],
                 ),
                 ),
