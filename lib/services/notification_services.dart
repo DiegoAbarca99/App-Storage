@@ -5,7 +5,12 @@ class NotificationService {
 
   static ShowSnackBar(String message){
     final snackBar=new SnackBar(
-      content: Text(message,style: TextStyle(color:Colors.white,fontSize: 20),)
+      backgroundColor:Colors.red,
+
+      content: Container(
+        height:20,
+        alignment: AlignmentDirectional.center,
+        child: Text(message,style: TextStyle(color:Colors.white,fontSize: 20),))
 
     );
 

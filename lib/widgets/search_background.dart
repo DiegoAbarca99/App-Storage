@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class AppBackground extends StatelessWidget {
+class SearchBackground extends StatelessWidget {
 
   final  Widget widget;
-  const AppBackground({Key? key,required this.widget}) : super(key: key);
+  const SearchBackground({Key? key,required this.widget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +14,12 @@ class AppBackground extends StatelessWidget {
       decoration: _buildBoxDecoration(),
       alignment: AlignmentDirectional.bottomEnd,
       width: double.infinity,
-      height: size.height*0.3,
+      height: double.infinity,
       child: this.widget
     );
   }
    BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
-      borderRadius: BorderRadius.circular(25),
        color: Colors.white,
        boxShadow: [
           BoxShadow(

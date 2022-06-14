@@ -7,20 +7,20 @@ import 'package:provider/provider.dart';
 
 
 
-class ProductSearchDelegate extends  SearchDelegate{
+class TransaccionSearchDelegate extends  SearchDelegate{
 
-  List<Product> _filter=[];
+  List<Transaccion> _filter=[];
 
-  List<Product> productsSearch;
+  List<Transaccion> transaccionsSearch;
   BussinesService bussinesService;
   String bussinesToken;
   Bussines selectedBussines;
 
 
-  ProductSearchDelegate({required this.productsSearch,required this.bussinesService,required this.bussinesToken,required this.selectedBussines});
+  TransaccionSearchDelegate({required this.transaccionsSearch,required this.bussinesService,required this.bussinesToken,required this.selectedBussines});
 
   @override
-  String? get searchFieldLabel => 'Buscar producto';
+  String? get searchFieldLabel => 'Buscar transacción';
 
 
   @override
@@ -64,12 +64,12 @@ class ProductSearchDelegate extends  SearchDelegate{
       }
 
 
-      _filter=productsSearch.where((product) {
-         return product.name.toLowerCase().contains(query.trim().toLowerCase());
+      _filter=transaccionsSearch.where((transaccion) {
+         return transaccion.concept!.toLowerCase().contains(query.trim().toLowerCase());
       }).toList();
 
       print('Lista filtrada: $_filter');
-      print('Productos del search: $productsSearch');
+      print('Transacciones del search: $transaccionsSearch');
 
 
       return SearchBackground(
@@ -79,10 +79,10 @@ class ProductSearchDelegate extends  SearchDelegate{
 
                     return GestureDetector(
                       onTap: () {
-                        Provider.of<SelectedProduct>(context,listen: false).selectedProduct = _filter[index].copy();
-                        Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);
+                        Provider.of<SelectedTransaccion>(context,listen: false).selectedTransaccion = _filter[index].copy();
+                        Navigator.pushNamed(context, 'viewtransaccion',arguments: [bussinesService,bussinesToken,selectedBussines]);
                     },
-                      child: ProductCard(product: _filter[index]),
+                      child: TransaccionCard(transaccion: _filter[index]),
                  );
                   
                 } 

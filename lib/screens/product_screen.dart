@@ -410,7 +410,6 @@ class _ProductForm extends StatelessWidget {
                   product.sellPrice = double.parse(value);
                 }
               },
-              keyboardType: TextInputType.number,
               decoration: InputDecorations.authInputDecoration(
                 hintText: 'Ingrese un valor', 
                 labelText: 'Valor de Venta:'
@@ -477,13 +476,6 @@ class _ProductForm extends StatelessWidget {
               if ( imageUrl != null ) productForm.product.picture = imageUrl;
 
 
-                  final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
-                  
-                  if(referenceNumber.isAdd==true){
-                      referenceNumber.referenceNum=referenceNumber.referenceNum+1;
-                  }
-                
-                  
                 
                   
 

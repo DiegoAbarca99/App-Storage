@@ -40,6 +40,7 @@ class ViewProductScreenBody extends StatelessWidget {
   final Bussines selectedBussines;
   final BussinesService bussinesService;
 
+
   const ViewProductScreenBody({Key? key,required this.bussinesService,required this.selectedBussines,required this.bussinesToken}) : super(key: key);
 
   @override
@@ -78,6 +79,7 @@ class ViewProductScreenBody extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.contain,
                           child: Container(
+                            alignment: AlignmentDirectional.center,
                             width:170,
                             height: 40,
                             decoration: _buildBoxDecoration(),
@@ -238,11 +240,7 @@ class ViewProductScreenBody extends StatelessWidget {
 
                 
 
-                  
-                  final referenceNumber= Provider.of<ReferenceNumberProvider>(context,listen:false);
-                  
-
-                  referenceNumber.referenceNum=referenceNumber.referenceNum-1;
+                
                   
                   await  productService.deleteProduct(selectedProduct!);
                   

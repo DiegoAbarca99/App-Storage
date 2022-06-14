@@ -5,5 +5,6 @@ export 'package:productos_app/widgets/card_container.dart';
 export 'package:productos_app/widgets/custom_bottom_navigator_bar.dart';
 export 'package:productos_app/widgets/product_card.dart';
 export 'package:productos_app/widgets/product_image.dart';
-
+export 'package:productos_app/widgets/transaccion_card.dart';
+export 'package:productos_app/widgets/search_background.dart';
 

@@ -27,6 +27,10 @@ class CustomBottomNavigatorBar extends StatelessWidget {
       label:'Inventario'
       ),
 
+       BottomNavigationBarItem(icon: Icon(Icons.list_alt_outlined),
+      label:'Balance'
+      ),
+
       BottomNavigationBarItem(icon: Icon(Icons.person),
       label:'Clientes'
       ),
@@ -36,10 +40,7 @@ class CustomBottomNavigatorBar extends StatelessWidget {
       ),
 
 
-      BottomNavigationBarItem(icon: Icon(Icons.list_alt_outlined),
-      label:'Balance'
-      ),
-
+     
       
 
     ]);

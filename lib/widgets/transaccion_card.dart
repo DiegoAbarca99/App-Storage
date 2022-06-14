@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/models/models.dart';
 
-class ProductCard extends StatelessWidget {
+class TransaccionCard extends StatelessWidget {
 
-     final Product product;
+     final Transaccion transaccion;
 
-  const ProductCard({Key? key,required this.product}) : super(key: key);
+  const TransaccionCard({Key? key,required this.transaccion}) : super(key: key);
 
    
 
@@ -30,23 +30,25 @@ class ProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
 
-                  Text(product.name,style:Theme.of(context).textTheme.headline6,),
+                  Text(transaccion.concept!,style:Theme.of(context).textTheme.headline6,),
 
                   SizedBox(height: 5,),
 
-                  Text(product.amount==0
-                      ?'No disponible'
-                      :'${product.amount.toString()} Disponible',
-                      style:Theme.of(context).textTheme.caption ,
-                      ),
+                  transaccion.type=='loss'
+                                    ?
+                                    Text("\$ ${transaccion.value}",style: TextStyle(color: Colors.red))
+                                    :
+                                    Text("\$ ${transaccion.value}",style: TextStyle(color: Colors.green)),
 
                   SizedBox(height: 5),
 
-                  Text('\$ ${product.sellPrice.toString()}')
+                  Text("${transaccion.type}"),
+
+                  
               ],),
               
 
-              _ProductImage(product.picture),
+              _TransaccionLogo(transaccion.type),
             ]),
         
       ),
@@ -56,7 +58,7 @@ class ProductCard extends StatelessWidget {
 
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
-      color: Colors.grey.shade300,
+       color: Colors.grey.shade300,
       borderRadius: BorderRadius.circular(25),
       boxShadow: [
         BoxShadow(
@@ -71,11 +73,13 @@ class ProductCard extends StatelessWidget {
 }
 
 
-class _ProductImage extends StatelessWidget {
- 
-  final String? url;
+class _TransaccionLogo extends StatelessWidget {
 
-  const _ProductImage( this.url );
+  final String type;
+ 
+
+
+  const _TransaccionLogo(this.type);
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +88,12 @@ class _ProductImage extends StatelessWidget {
       child: Container(
         width: 50,
         height: 50,
-        child: url == null
-          ? Image(
-              image: AssetImage('assets/no-image.png'),
-              fit: BoxFit.cover
-            )
-          : FadeInImage(
-            placeholder: AssetImage('assets/jar-loading.gif'),
-            image: NetworkImage(url!),
-            fit: BoxFit.cover,
-          ),
+        child:type=='Gain'
+                        ?
+                        Icon(Icons.monetization_on_outlined,color:Colors.green)
+                        :
+                        Icon(Icons.monetization_on_outlined,color:Colors.red)
+         
       ),
     );
   }

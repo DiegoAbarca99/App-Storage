@@ -27,7 +27,6 @@ class IventoryScreen extends StatelessWidget   {
 
     final productsService = Provider.of<ProductsService>(context);
 
-      final referenceNumber=Provider.of<ReferenceNumberProvider>(context);
 
        
       
@@ -114,7 +113,7 @@ class IventoryScreen extends StatelessWidget   {
                         
                         Text('Total de referencias'),
                         
-                        Text('${referenceNumber.referenceNum.toString()}')
+                        Text('${multiplication.length.toString()}')
                         
                           
                         ],
@@ -143,27 +142,30 @@ class IventoryScreen extends StatelessWidget   {
             ),
           ),
          
-             AppBackground(
-               widget: ListView.builder(
-                itemCount: productsService.products.length,
-                itemBuilder: ( BuildContext context, int index ) {
+             Padding(
+               padding: const EdgeInsets.symmetric(horizontal:15.0),
+               child: AppBackground(
+                 widget: ListView.builder(
+                  itemCount: productsService.products.length,
+                  itemBuilder: ( BuildContext context, int index ) {
+                    
+                    
 
-                  
-                  
+                      return GestureDetector(
+                        onTap: () {
 
-                    return GestureDetector(
-                      onTap: () {
-                       
-                         referenceNumber.isAdd=false;
-                        Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
-                        Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);
-                    },
-                      child: ProductCard(product: productsService.products[index]),
-                 );
-                  
-                } 
-              ),
+                         
+                      
+                          Provider.of<SelectedProduct>(context,listen: false).selectedProduct = productsService.products[index].copy();
+                          Navigator.pushNamed(context, 'viewproduct',arguments: [bussinesService,bussinesToken,selectedBussines]);
+                      },
+                        child: ProductCard(product: productsService.products[index]),
+                   );
+                    
+                  } 
+                ),
             ),
+             ),
           
 
          SizedBox(height:15),
@@ -180,7 +182,9 @@ class IventoryScreen extends StatelessWidget   {
               ),
               onPressed:() async {
 
-                Provider.of<ReferenceNumberProvider>(context,listen:false).isAdd=true;
+     
+
+                
 
                 Provider.of<SelectedProduct>(context,listen: false).selectedProduct= new Product(
                  name: '', 

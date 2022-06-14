@@ -8,4 +8,7 @@ export 'package:productos_app/screens/check_auth_screen.dart';
 export 'package:productos_app/screens/bussines_screen.dart';
 export 'package:productos_app/screens/iventory_screen.dart';
 export'package:productos_app/screens/view_product_screen.dart';
+export'package:productos_app/screens/balance_screen.dart';
+export 'package:productos_app/screens/transaccion_screen.dart';
+export 'package:productos_app/screens/view_transaccion_screen.dart';
 

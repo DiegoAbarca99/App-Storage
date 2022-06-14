@@ -163,7 +163,7 @@ class BussinesScreen extends StatelessWidget {
     BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(25),
-       color: Colors.grey.shade400,
+       color: Colors.white,
        boxShadow: [
           BoxShadow(
             color: Colors.black12,

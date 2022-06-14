@@ -5,4 +5,5 @@ export 'package:productos_app/providers/bussines_form_provider.dart';
 export 'package:productos_app/providers/ui_provider.dart';
 export 'package:productos_app/providers/selected_bussines_provider.dart';
 export 'package:productos_app/providers/user_bussines_provider.dart';
-export 'package:productos_app/providers/reference_number_provider.dart';
+export 'package:productos_app/providers/selected_transaccion_provider.dart';
+
